@@ -374,15 +374,18 @@ public class SpringApplication {
 	private void prepareContext(ConfigurableApplicationContext context,
 			ConfigurableEnvironment environment, SpringApplicationRunListeners listeners,
 			ApplicationArguments applicationArguments, Banner printedBanner) {
+		//Environment引用赋给context上下文
 		context.setEnvironment(environment);
 		postProcessApplicationContext(context);
 		applyInitializers(context);
+		//触发监听SpringApplicationRunListener contextPrepared步骤
 		listeners.contextPrepared(context);
 		if (this.logStartupInfo) {
 			logStartupInfo(context.getParent() == null);
 			logStartupProfileInfo(context);
 		}
 		// Add boot specific singleton beans
+		//将一些对象(applicationArguments、printedBanner)放入bean工厂管理(IOC)，和是否允许bean覆盖
 		ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
 		beanFactory.registerSingleton("springApplicationArguments", applicationArguments);
 		if (printedBanner != null) {
@@ -392,14 +395,17 @@ public class SpringApplication {
 			((DefaultListableBeanFactory) beanFactory)
 					.setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
 		}
+		//懒初始化BeanFactory后处理器
 		if (this.lazyInitialization) {
 			context.addBeanFactoryPostProcessor(
 					new LazyInitializationBeanFactoryPostProcessor());
 		}
 		// Load the sources
+		//记载资源，默认从入口类
 		Set<Object> sources = getAllSources();
 		Assert.notEmpty(sources, "Sources must not be empty");
 		load(context, sources.toArray(new Object[0]));
+		//触发监听SpringApplicationRunListener contextLoaded步骤
 		listeners.contextLoaded(context);
 	}
 
@@ -432,8 +438,8 @@ public class SpringApplication {
 
 	private <T> Collection<T> getSpringFactoriesInstances(Class<T> type,
 			Class<?>[] parameterTypes, Object... args) {
+		//类加载器
 		ClassLoader classLoader = getClassLoader();
-		// Use names and ensure unique to protect against duplicates
 		Set<String> names = new LinkedHashSet<>(
 				SpringFactoriesLoader.loadFactoryNames(type, classLoader));
 		List<T> instances = createSpringFactoriesInstances(type, parameterTypes,

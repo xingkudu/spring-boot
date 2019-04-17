@@ -22,6 +22,9 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 	</properties>
+	<modules>
+		<module>../../../spring-boot-samples</module>
+	</modules>
 	<build>
 		<!-- Turn on filtering by default for application properties -->
 		<resources>

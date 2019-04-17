@@ -1,0 +1,8 @@
+# Run Listeners
+org.springframework.boot.SpringApplicationRunListener=\
+sample.simple.extension.CustomSpringApplicationRunListener
+
+# Application Listeners
+org.springframework.context.ApplicationListener=\
+sample.simple.extension.CustomApplicationListener,\
+sample.simple.extension.CustomGenericApplicationListener
